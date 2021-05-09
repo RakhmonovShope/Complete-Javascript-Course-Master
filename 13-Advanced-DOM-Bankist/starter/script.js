@@ -65,3 +65,4 @@ console.log(generatorFunc.next().value); // 2
 console.log(generatorFunc.next().value); // 3
 console.log(generatorFunc.next(10).value); // 14
 console.log(generatorFunc.next().value); // 15
+console.log(generatorFunc.next(10).value); // 26
