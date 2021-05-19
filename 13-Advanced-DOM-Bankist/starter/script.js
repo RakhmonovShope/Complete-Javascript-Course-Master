@@ -49,42 +49,42 @@ const byClassNames = document.getElementsByClassName('btn--close-modal');
 
 const header = document.querySelector('.header');
 
-const message = document.createElement('div');
-message.classList.add('cookie-message');
-message.textContent = 'We use cookie for improved functionality and analytics.';
+// const message = document.createElement('div');
+// message.classList.add('cookie-message');
+// message.textContent = 'We use cookie for improved functionality and analytics.';
 
-const button = document.createElement('button');
-button.classList.add('btn');
-button.textContent = 'close';
+// const button = document.createElement('button');
+// button.classList.add('btn');
+// button.textContent = 'close';
 
-message.prepend(button);
+// message.prepend(button);
 
-// header.prepend(message);
-// header.append(message);
-// header.before(message);
-header.after(message);
+// // header.prepend(message);
+// // header.append(message);
+// // header.before(message);
+// header.after(message);
 
 // header.insertAdjacentElement('beforebegin', message);
 // header.insertAdjacentElement('afterbegin', message);
 // header.insertAdjacentElement('beforeend', message);
 // header.insertAdjacentElement('afterend', message);
 
-button.addEventListener('click', () => {
-  message.remove();
-});
+// button.addEventListener('click', () => {
+//   message.remove();
+// });
 
-message.style.backgroundColor = '#37383d';
+// message.style.backgroundColor = '#37383d';
 
-message.style.height =
-  Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
+// message.style.height =
+//   Number.parseFloat(getComputedStyle(message).height) + 30 + 'px';
 
-const anchor = document.querySelector('.nav__link');
+// const anchor = document.querySelector('.nav__link');
 
 //                    not standart
 // anchor.fields
 //                  but it can be fixed like below
-anchor.setAttribute('fields', '232dsa');
-anchor.getAttribute('fields');
+// anchor.setAttribute('fields', '232dsa');
+// anchor.getAttribute('fields');
 
 //   method below is much more dangerous becouse it overwrite all classNames and clears ald ones
 // anchor.className = 'dsa';
@@ -102,7 +102,6 @@ const section1 = document.querySelector('#section--1');
 
 scroolToBtn.addEventListener('click', e => {
   const coors1 = section1.getBoundingClientRect();
-
   // console.log(window.pageXOffset), console.log(window.pageYOffset);
   // window.scrollTo({
   //   left: coors1.left + window.pageXOffset,
@@ -195,3 +194,81 @@ document
         }
       });
   });
+
+const nav = document.querySelector('.nav');
+
+const changeOpacity = function (el) {
+  if (el.target.classList.contains('nav__link')) {
+    const link = el.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(e => {
+      if (e != link) {
+        e.style.opacity = this;
+        logo.style.opacity = this;
+      }
+    });
+  }
+};
+
+nav.addEventListener('mouseover', changeOpacity.bind(0.5));
+
+nav.addEventListener('mouseout', changeOpacity.bind(1));
+
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+
+headerObserver.observe(header);
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+
+const observer = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+document.querySelectorAll('.section').forEach(section => {
+  observer.observe(section);
+  section.classList.add('section--hidden');
+});
+
+const images = document.querySelectorAll('img[data-src]');
+
+const loadImage = function (entries, observer) {
+  const [entry] = entries;
+  const element = entry.target;
+  if (!entry.isIntersecting) return;
+  element.src = element.getAttribute('data-src');
+
+  element.addEventListener('load', function (e) {
+    element.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+
+const revealImages = new IntersectionObserver(loadImage, {
+  root: null,
+  threshold: 0.15,
+  rootMargin: '-200px',
+});
+
+images.forEach(el => {
+  revealImages.observe(el);
+});
