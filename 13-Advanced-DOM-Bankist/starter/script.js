@@ -272,3 +272,70 @@ const revealImages = new IntersectionObserver(loadImage, {
 images.forEach(el => {
   revealImages.observe(el);
 });
+
+const slides = document.querySelectorAll('.slide');
+const btnNext = document.querySelector('.slider__btn--right');
+const btnPrev = document.querySelector('.slider__btn--left');
+const maxLength = slides.length - 1;
+const dots = document.querySelector('.dots');
+
+let currentSlide = 0;
+
+const moveSlides = currentSlide => {
+  slides.forEach((el, i) => {
+    el.style.transform = `translateX(${100 * (i - currentSlide)}%)`;
+  });
+};
+
+moveSlides(0);
+slides.forEach((_, i) => {
+  dots.insertAdjacentHTML(
+    'beforeend',
+    `<div class="dots__dot" data-slide="${i}"></div>`
+  );
+});
+
+const activateDots = function (slide) {
+  document.querySelectorAll('.dots__dot').forEach(el => {
+    el.classList.remove('dots__dot--active');
+  });
+
+  document
+    .querySelector(`div[data-slide="${slide}"`)
+    .classList.add('dots__dot--active');
+};
+activateDots(0);
+
+const nextSlide = function () {
+  if (currentSlide === maxLength) {
+    currentSlide = 0;
+  } else currentSlide++;
+
+  moveSlides(currentSlide);
+  activateDots(currentSlide);
+};
+const prevSlide = function () {
+  if (currentSlide === 0) {
+    currentSlide = maxLength;
+  } else currentSlide--;
+
+  moveSlides(currentSlide);
+  activateDots(currentSlide);
+};
+
+btnNext.addEventListener('click', nextSlide);
+btnPrev.addEventListener('click', prevSlide);
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowLeft') prevSlide();
+  e.key === 'ArrowRight' && nextSlide();
+});
+
+dots.addEventListener('click', function (e) {
+  const element = e.target;
+  if (element.classList.contains('dots__dot')) {
+    const attr = element.getAttribute('data-slide');
+    moveSlides(attr);
+    activateDots(attr);
+  }
+});
