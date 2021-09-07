@@ -62,7 +62,7 @@
 // <!--------------- CLass constructor rules ------------>
 
 // 1-step:  Classes are not hoisted
-// 2-step:  Classes are first-class citizens
+// 2-step:  Classes are first-class citizens (We cannot pass them into the functions and return them from the functions )
 // 3-step:  Classes are always in sctrict mode
 
 // class PersonCl {
@@ -195,23 +195,128 @@
 // console.log(jonas instanceof Student);
 // console.log(jonas instanceof Object);
 
-class PersonCl {
-  constructor(firstName, birthYear) {
-    this.firstName = firstName;
-    this.birthYear = birthYear;
-  }
+// <!------------   #3 Code Challenge  --------------->
 
-  calcAge() {
-    console.log(2021 - this.birthYear);
-  }
-}
+// const Car = function (make, currentSpeed) {
+//   this.make = make;
+//   this.currentSpeed = currentSpeed;
+// };
 
-class StudentCl {
-  constructor(courses) {
-    PersonCl.call(this, firstName, birthYear);
-    this.courses = courses;
-  }
-}
+// const EV = function (make, currentSpeed, charge) {
+//   Car.call(this, make, currentSpeed);
+//   this.charge = charge;
+// };
 
-const jonas = new StudentCl('Jonas', 1991, 'Data set');
-console.log(jonas);
+// Car.prototype.chargeBattery = function (chargeTo) {
+//   this.charge = chargeTo;
+// };
+// Car.prototype.accelerate = function (increment, decrement) {
+//   this.currentSpeed += increment;
+//   this.charge -= decrement;
+
+//   console.log(
+//     `Porschee Taycan going at ${this.currentSpeed}, with a charge of ${this.charge} `
+//   );
+// };
+
+// EV.prototype = Object.create(Car.prototype);
+
+// EV.prototype.accelerate = function () {
+//   this.make = 'Tesla';
+//   console.log(this.make);
+// };
+
+// const porsche = new EV('Porschee', 220, 45);
+// porsche.chargeBattery(55);
+
+// console.log(porsche);
+// porsche.accelerate();
+
+//  <!------ Inheritance between classes ES6 Classes ---->
+
+// class PersonCl {
+//   constructor(fullName, birthYear) {
+//     this.fullName = fullName;
+//     this.birthYear = birthYear;
+//   }
+
+//   // Instance methods
+//   calcAge() {
+//     console.log(2037 - this.birthYear);
+//   }
+
+//   greet() {
+//     console.log(`Hey ${this.fullName}`);
+//   }
+
+//   get age() {
+//     return 2037 - this.birthYear;
+//   }
+
+//   set fullName(name) {
+//     console.log(name);
+//     if (name.includes(' ')) this._fullName = name;
+//     else alert(`${name} is not a full name!`);
+//   }
+
+//   get fullName() {
+//     return this._fullName;
+//   }
+
+//   // Static method
+//   static hey() {
+//     console.log('Hey there 👋');
+//   }
+// }
+
+// const jonas = new PersonCl('Jonas Schmedmant', 1991);
+
+// class StudentCl extends PersonCl {
+//   constructor(fullName, birthYear, course) {
+//     // Always needs to happen first!
+//     super(fullName, birthYear);
+//     this.course = course;
+//   }
+//   introduce() {
+//     console.log(`My name is ${this.fullName} and I study ${this.course}`);
+//   }
+//   calcAge() {
+//     console.log(
+//       `I'm ${
+//         2037 - this.birthYear
+//       } years old, but as a student I feel more like ${
+//         2037 - this.birthYear + 10
+//       }`
+//     );
+//   }
+// }
+
+// const martha = new StudentCl('Martha Jones', 2012, 'Computer Science');
+
+// martha.introduce();
+// martha.calcAge();
+
+//  <!------ Inheritance between classes Object.create() ---->
+
+// const PersonProto = {
+//   calcAge() {
+//     console.log(2021 - this.birthYear);
+//   },
+
+//   init(firstName, birthYear) {
+//     this.firstName = firstName;
+//     this.birthYear = birthYear;
+//   },
+// };
+
+// const StudentProto = Object.create(PersonProto);
+
+// StudentProto.init = function (firstName, birthYear, course) {
+//   PersonProto.init.call(this, firstName, birthYear);
+//   this.course = course;
+//   console.log(this);
+// };
+
+// const martha = Object.create(StudentProto);
+
+// martha.init('Martha', 1997, 'web');
