@@ -281,7 +281,7 @@ class App {
   }
 
   reset() {
-    window.localStorage.remove('workouts');
+    window.localStorage.removeItem('workouts');
     window.location.reload();
   }
 }
